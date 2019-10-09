@@ -41,4 +41,21 @@ defmodule RentalWeb.UserController do
       send_resp(conn, :no_content, "")
     end
   end
+
+
+  # Custom Endpoints Methods
+  # User login
+  def login(conn, %{"infor" => infor}) do
+
+    case Accounts.login(infor) do
+      {:ok, messase} ->
+        conn
+        |> json(%{messase: messase})
+      {:error, error} -> 
+        conn
+        |> json(%{error: error})
+    end
+    
+  end
+
 end

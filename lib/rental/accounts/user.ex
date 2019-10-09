@@ -22,13 +22,6 @@ defmodule Rental.Accounts.User do
     |> password_hash()
     |> unique_constraint(:username, message: "Username Provided already exists")
     |> unique_constraint(:email, message: "Email You Provided Already Exists")
-
-  end
-
-
-  # A method to validate Username
-  def validate_username(changeset) do
-
   end
 
   defp validate_username_len(changeset) do
@@ -52,16 +45,17 @@ defmodule Rental.Accounts.User do
     confirm_password = get_field(changeset, :confirm_password)
 
     cond do
-      String.length(password) < 6 or String.length(password) > 15 -> 
-        add_error(changeset, :password, "password must be between 6 and 15 characters")
+      String.length(password) < 6 -> 
+        add_error(changeset, :password, "password must be between 6 characters")
       confirm_password !== password -> 
         add_error(changeset, :confirm_password, "Your passwords must match")
       true -> 
         changeset 
     end
+
   end
 
-  def password_hash(changeset) do
+  defp password_hash(changeset) do
     password = get_field(changeset, :password)
     confirm_password = get_field(changeset, :confirm_password)
     put_change(changeset, :password, Comeonin.Bcrypt.hashpwsalt(password))

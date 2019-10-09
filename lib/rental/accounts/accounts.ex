@@ -17,7 +17,7 @@ defmodule Rental.Accounts do
       [%User{}, ...]
 
   """
-  def list_users do
+  def list_users() do
     Repo.all(User)
   end
 
@@ -100,5 +100,52 @@ defmodule Rental.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def get_user_by_username(username) do
+    from(u in User, where: u.username == ^username, select: u)
+    |> Repo.all
+  end
+
+  def get_list_head(item) do
+    case item do
+      {:ok, list} -> 
+        [head | _] = list
+        {:ok, head}
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  def checker(list_to_check) do
+    with resp = [_|_] <- list_to_check do
+      {:ok, resp}
+    else _ ->
+      {:error, "Invalid Username"}
+    end
+  end 
+
+  def login(%{"password" => password, "username" => username}) do
+    user = username
+    |> get_user_by_username
+    |> checker
+    |> get_list_head
+
+    case user do
+      {:ok, user} -> 
+        bool = password
+        |> Comeonin.Bcrypt.checkpw(Map.from_struct(user).password)
+
+        if bool do
+          {:ok, "Successfull Login"}
+
+        else
+          {:error, "Invalid Password"}
+        end
+
+      {:error, message} -> 
+        {:error, message}
+    end
+
   end
 end

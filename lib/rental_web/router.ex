@@ -25,6 +25,7 @@ defmodule RentalWeb.Router do
 
     # Users Routes
     resources "/users", UserController
+    post "/users/login", UserController, :login
 
     # Tenants
     resources "/tenants", TenantController

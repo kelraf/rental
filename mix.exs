@@ -43,7 +43,8 @@ defmodule Rental.Mixfile do
       {:plug_cowboy, "~> 1.0"},
       {:cowboy, "~> 1.0"},
       {:ecto, "~> 2.2.0"},
-      {:comeonin, "~> 2.6.0"}
+      {:comeonin, "~> 2.6.0"},
+      {:guardian, "~> 1.2"}
     ]
   end
 
